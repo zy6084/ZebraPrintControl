@@ -1,0 +1,55 @@
+﻿<dx:DXWindow
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxrud="http://schemas.devexpress.com/winfx/2008/xaml/reports/userdesigner" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxre="http://schemas.devexpress.com/winfx/2008/xaml/richedit" x:Class="DXApplication2.MainWindow"
+        Title="设备主界面" Height="350" Width="525" WindowStartupLocation="CenterScreen" WindowState="Maximized" Icon="{dx:DXImage Image=Window_16x16.png}">
+    <dx:DXWindow.Resources>
+        <dx:UnboundDataSource x:Key="UnboundDataSource" Count="0">
+            <dx:DesignDataManager.DesignData>
+                <dx:DesignDataSettings RowCount="5"/>
+            </dx:DesignDataManager.DesignData>
+        </dx:UnboundDataSource>
+    </dx:DXWindow.Resources>
+    <Grid>
+        <DockPanel>
+            <dxb:ToolBarControl Caption="{x:Null}" DockPanel.Dock="Top">
+                <dxb:BarButtonItem Content="查询" Glyph="{dx:DXImage Image=Find_32x32.png}" LargeGlyph="{dx:DXImage Image=Find_32x32.png}" BarItemDisplayMode="ContentAndGlyph"/>
+                <dxb:BarButtonItem x:Name="btnPrint" Content="打印" Glyph="{dx:DXImage Image=Printer_32x32.png}" LargeGlyph="{dx:DXImage Image=Printer_32x32.png}" OverridesDefaultStyle="True" ItemClick="btnPrint_ItemClick" BarItemDisplayMode="ContentAndGlyph"/>
+                <dxb:BarButtonItem Content="打印预览" Glyph="{dx:DXImage Image=PrintDialog_32x32.png}" LargeGlyph="{dx:DXImage Image=PrintDialog_32x32.png}" BarItemDisplayMode="ContentAndGlyph" ItemClick="BarButtonItem_ItemClick"/>
+                <dxb:BarButtonItem Content="另存为" Glyph="{dx:DXImage Image=SaveTo_32x32.png}" LargeGlyph="{dx:DXImage Image=SaveTo_32x32.png}" BarItemDisplayMode="ContentAndGlyph"/>
+                <dxb:BarButtonItem x:Name="btnCodePrint" Content="打印条码" Glyph="{dx:DXImage Image=Barcode_32x32.png}" LargeGlyph="{dx:DXImage Image=Barcode_32x32.png}" BarItemDisplayMode="ContentAndGlyph" ItemClick="btnCodePrint_ItemClick"/>
+            </dxb:ToolBarControl>
+            <dxb:StatusBarControl Caption="StatusBar" DockPanel.Dock="Bottom" ShowSizeGrip="True"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition  Height="5*"/>
+                    <RowDefinition  Height="2*"/>
+                    <RowDefinition  Height="5*"/>
+                    <RowDefinition  Height="5*"/>
+                </Grid.RowDefinitions>
+                <dxg:GridControl x:Name="gcTable" AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True"  Grid.RowSpan="4" ItemsSource="{Binding Data, Source={StaticResource UnboundDataSource}}">
+                    <dxg:GridControl.View>
+                        <dxg:TableView AllowPerPixelScrolling="True" ShowTotalSummary="True"/>
+                    </dxg:GridControl.View>
+                    <dxg:GridColumn FieldName="名称" />
+                    <dxg:GridColumn FieldName="内容"/>
+                    <dxg:GridColumn FieldName="型号"/>
+                    <dxg:GridColumn FieldName="数量"/>
+                </dxg:GridControl>
+                <dxe:BarCodeEdit x:Name="barcode1" Grid.Column="1" Grid.Row="0" AutoModule="True"  HorizontalTextAlignment="Center" VerticalTextAlignment="Center" ShowText="False" ShowNullText="False" ShowNullTextForEmptyValue="False" AllowNullInput="True" HorizontalContentAlignment="Center" >
+                    <dxe:BarCodeEdit.StyleSettings>
+                        <dxe:QRCodeStyleSettings CompactionMode="Byte"/>
+                    </dxe:BarCodeEdit.StyleSettings>
+                </dxe:BarCodeEdit>
+                <dxe:TextEdit Name="teLabel" Grid.Column="1"   Grid.Row="1"  IsReadOnly="True" Text="二维码内容：" HorizontalContentAlignment="Center" />
+                <dxe:TextEdit  Name="teCodeInfo" Grid.Column="1"  Grid.Row="2"  AllowNullInput="True" TextWrapping="WrapWithOverflow" Text="{Binding ElementName=barcode1,Path=EditValue,Mode=OneWay}" HorizontalContentAlignment="Center" />
+            </Grid>
+        </DockPanel>
+    </Grid>
+</dx:DXWindow>
